@@ -21,7 +21,6 @@ class PrepareGif:
                 self.num_of_animals_in_generation_max,
                 self.history[counter].get_animal_count()
             )
-        print(f"generations: {self.num_of_generations}, animals_max: {self.num_of_animals_in_generation_max}")
         self.np_array = np.empty((self.num_of_generations, self.num_of_animals_in_generation_max, 3))
         for counter_generations in range(self.num_of_generations):
             for counter_animals in range(self.num_of_animals_in_generation_max):
@@ -30,7 +29,6 @@ class PrepareGif:
                 self.np_array[counter_generations][counter_animals][0] = f1
                 self.np_array[counter_generations][counter_animals][1] = f2
                 self.np_array[counter_generations][counter_animals][2] = adap
-        print("Loading succeed")
 
     def load_setup(self, setup):
         self.setup = setup
@@ -77,11 +75,9 @@ class PrepareGif:
             images_3d.append(imageio.imread(filename_3d))
         for filename_hm in filenames_hm:
             images_hm.append(imageio.imread(filename_hm))
-        gif_3d_filename = f"plot/ARiG_3d_animation_{func}_{algo}.gif"
-        gif_hm_filename = f"plot/ARiG_heatmap_animation_{func}_{algo}.gif"
+        gif_3d_filename = f"plot/gif/ARiG_3d_animation_{func}_{algo}.gif"
+        gif_hm_filename = f"plot/gif/ARiG_heatmap_animation_{func}_{algo}.gif"
         imageio.mimsave(gif_3d_filename, images_3d, duration=1000)
         imageio.mimsave(gif_hm_filename, images_hm, duration=1000)
         for filename in filenames_3d:
-            os.remove(filename)
-        for filename in filenames_hm:
             os.remove(filename)

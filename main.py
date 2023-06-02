@@ -1,6 +1,8 @@
 from setup import Setup
 from genetic import Genetic
+from firefly import FireFly
 from prepare_gif import PrepareGif
+
 
 if __name__ == '__main__':
     print('ARiGv4')
@@ -28,7 +30,15 @@ if __name__ == '__main__':
         genetic_task.load_setup(setup[adapt_func])
         genetic_task.execute(10)
         history_gen = genetic_task.get_history()
+        setup[adapt_func].create_animal_list(1000)
+        print(f"Launching setup '{adapt_func}' with algorithm FireFly()")
+        firefly_task = FireFly()
+        firefly_task.load_setup(setup[adapt_func])
+        firefly_task.execute(10000)
+        history_ff = firefly_task.get_history()
         gif_writer = PrepareGif()
         gif_writer.load_setup(setup[adapt_func])
         gif_writer.load_history(history_gen)
         gif_writer.save_image(f"{adapt_func}", "genetic")
+        gif_writer.load_history(history_ff)
+        gif_writer.save_image(f"{adapt_func}", "firefly")
