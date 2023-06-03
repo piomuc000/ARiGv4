@@ -8,7 +8,7 @@ class FireFly2:
         self.animal_list: AnimalList | None = None
         self.history: dict[int, AnimalList] = {}
         self.setup = None
-        self.elite = 4
+        self.elite = 2
         self.action_counter = 0
 
     def load_setup(self, setup):
@@ -41,7 +41,7 @@ class FireFly2:
             self.flight(selected_animal)
             self.animal_fix(selected_animal)
             num_of_changes = self.action_counter + 1
-            if num_of_changes % 1000 and num_of_changes != actions:
+            if num_of_changes % 500 and num_of_changes != actions:
                 continue
             history_ctr += 1
             self.animal_list.sort_by_adaptation()
@@ -53,9 +53,9 @@ class FireFly2:
     def flight(self, animal: Animal):
         """Firefly mission dispatcher"""
         mission_roulette = np.random.uniform()
-        if mission_roulette < 0.9:
+        if mission_roulette < 0.98:
             self.flight_light(animal)
-        elif mission_roulette < 0.95:
+        elif mission_roulette < 0.99:
             self.flight_roam(animal)
         else:
             self.flight_random(animal)
@@ -67,16 +67,16 @@ class FireFly2:
 
     def flight_roam(self, animal: Animal):
         x1s, x1e, x2s, x2e = self.setup.get_ranges()
-        x1m = np.random.normal(animal.get_features("x1"), abs(x1e-x1s)*0.05)
+        x1m = np.random.normal(animal.get_features("x1"), abs(x1e-x1s)*0.01)
         animal.set_features(x1=x1m)
-        x2m = np.random.normal(animal.get_features("x2"), abs(x2e-x2s)*0.05)
+        x2m = np.random.normal(animal.get_features("x2"), abs(x2e-x2s)*0.01)
         animal.set_features(x2=x2m)
 
     def flight_light(self, animal: Animal):
         elite_idx, target_distance = self.find_near_elite(animal)
-        x1m = np.random.normal(self.animal_list.get_animal(elite_idx).get_features("x1"), target_distance*0.1)
+        x1m = np.random.normal(self.animal_list.get_animal(elite_idx).get_features("x1"), target_distance*0.03)
         animal.set_features(x1=x1m)
-        x2m = np.random.normal(self.animal_list.get_animal(elite_idx).get_features("x2"), target_distance*0.1)
+        x2m = np.random.normal(self.animal_list.get_animal(elite_idx).get_features("x2"), target_distance*0.03)
         animal.set_features(x2=x2m)
 
     def calculate_distance(self, animal1: Animal, animal2: Animal) -> float:

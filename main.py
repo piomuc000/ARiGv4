@@ -1,6 +1,7 @@
 from setup import Setup
 from genetic import Genetic
 from firefly import FireFly
+from firefly2 import FireFly2
 from prepare_gif import PrepareGif
 
 
@@ -36,9 +37,17 @@ if __name__ == '__main__':
         firefly_task.load_setup(setup[adapt_func])
         firefly_task.execute(10000)
         history_ff = firefly_task.get_history()
+        setup[adapt_func].create_animal_list(1000)
+        print(f"Launching setup '{adapt_func}' with algorithm FireFly2()")
+        firefly2_task = FireFly2()
+        firefly2_task.load_setup(setup[adapt_func])
+        firefly2_task.execute(7000)
+        history_ff2 = firefly2_task.get_history()
         gif_writer = PrepareGif()
         gif_writer.load_setup(setup[adapt_func])
         gif_writer.load_history(history_gen)
         gif_writer.save_image(f"{adapt_func}", "genetic")
         gif_writer.load_history(history_ff)
         gif_writer.save_image(f"{adapt_func}", "firefly")
+        gif_writer.load_history(history_ff2)
+        gif_writer.save_image(f"{adapt_func}", "firefly2")
